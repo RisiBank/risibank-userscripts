@@ -1,0 +1,33 @@
+// ==UserScript==
+// @name         RisiBank pour JVC
+// @namespace    risibank.fr
+// @description  La RisiBank intégrée sur JVC, comme par magie !
+// @author       RisiBank Admin
+// @version      1.2.32
+// @website      https://risibank.fr
+// @homepage     https://risibank.fr
+// @match        https://www.jeuxvideo.com/forums/*
+// @match        https://www.jeuxvideo.com/recherche/forums/*
+// @match        https://www.jeuxvideo.com/messages-prives/message.php?id=*
+// @match        https://www.jeuxvideo.com/messages-prives/nouveau.php*
+// @match        https://www.jeuxvideo.com/forums/message/*
+// @match        https://m.jeuxvideo.com/forums/create_topic.php*
+// @match        https://m.jeuxvideo.com/forums/create_message.php*
+// @match        https://m.jeuxvideo.com/forums/*
+// @icon         https://risibank.fr/logo.png
+// @require      https://risibank.fr/downloads/web-api/risibank.js?1.2.32
+// @updateURL    https://risibank.fr/downloads/userscript/jvc/jvc.user.js
+// @downloadURL  https://risibank.fr/downloads/userscript/jvc/jvc.user.js
+// @run-at       document-start
+// @connect      risibank.fr
+// @connect      image.noelshack.com
+// @grant        GM_addStyle
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_xmlhttpRequest
+// @grant        GM.addStyle
+// @grant        GM.setValue
+// @grant        GM.getValue
+// @grant        GM.xmlHttpRequest
+// @noframes
+// ==/UserScript==

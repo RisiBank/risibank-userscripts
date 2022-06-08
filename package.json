@@ -1,0 +1,30 @@
+{
+    "name": "risibank-userscripts",
+    "version": "0.0.1",
+    "description": "Enhance RisiBank integration on various places using userscipts ✨",
+    "main": "src/index.js",
+    "scripts": {
+        "build": "./node_modules/.bin/gulp"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/RisiBank/risibank-userscripts.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/RisiBank/risibank-userscripts/issues"
+    },
+    "homepage": "https://github.com/RisiBank/risibank-userscripts#readme",
+    "devDependencies": {
+        "gulp": "^4.0.2",
+        "gulp-concat": "^2.6.1",
+        "webpack": "^5.64.4",
+        "webpack-cli": "^4.9.1",
+        "webpack-stream": "^7.0.0"
+    },
+    "dependencies": {
+        "risibank-web-api": "^0.0.1"
+    }
+}
