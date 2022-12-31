@@ -17,7 +17,7 @@ export class ImageEnhancerPlugin {
         // Normalize images (replaces noelshack links with the direct link to the image)
         const replaceRegExps = {
             '^https://www.noelshack.com/(2022|2021|2020|2019)-(\\d+)-(\\d+)-([\\w\\[\\]\\._-]+)$': 'https://image.noelshack.com/fichiers/$1/$2/$3/$4',
-            '^https://www.noelshack.com/(\\d+)-(\\d+)-(\\d+)-([\\w\\[\\]\\._-]+)$': 'https://image.noelshack.com/fichiers/$1/$2/$3-$4',
+            '^https://www.noelshack.com/(\\d+)-(\\d+)-(\\d+)-([\\w\\[\\]\\._-]+)$': 'https://image.noelshack.com/fichiers/$1/$2/$3/$4',
             //'^https://image.noelshack.com/minis/([\\d/]+)/([\\w\\[\\]\\._-]+)\\.(\\w+)$':  'https://image.noelshack.com/fichiers/$1/$2.$3',
         };
         images = images.map(image => {
