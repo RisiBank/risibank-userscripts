@@ -1,4 +1,5 @@
-const { scriptOptions } = require('../ScriptOptions.js');
+import { scriptOptions } from '../ScriptOptions.js';
+import { getSelectors } from '../utils.js';
 
 
 export class AntiCensorPlugin {
@@ -43,32 +44,23 @@ export class AntiCensorPlugin {
         }
         // When sending the message, censor all bad words
         if (scriptOptions.getOption('antiCensorPlugin')) {
-            let submitButtonSelector;
-            let contentSelector;
-            if (this.model.pageType === 'web') {
-                submitButtonSelector = '.btn.btn-poster-msg';
-                contentSelector = '#message_topic';
-            } else if (this.model.pageType === 'mp') {
-                submitButtonSelector = '.btn.btn-poster-msg';
-                contentSelector = '#message';
-            } else if (this.model.pageType === 'mobile') {
-                submitButtonSelector = '.sub-form-fmobile';
-                contentSelector = '.area-form-fmobile';
-            } else {
-                // Unknown page type
+            const { submitButtonSelector, contentSelector } = getSelectors(this.model.pageType);
+            if (!submitButtonSelector || !contentSelector) {
+                return;
             }
             const sendMessageButton = document.querySelector(submitButtonSelector);
-            if (sendMessageButton) {
-                sendMessageButton.addEventListener('click', () => {
-                    const messageInput = document.querySelector(contentSelector);
-                    for (const key in AntiCensorPlugin.associations) {
-                        const value = AntiCensorPlugin.associations[key];
-                        const [from, to] = [key, value];
-                        const regex = new RegExp(from, 'gi');
-                        messageInput.value = messageInput.value.replace(regex, to);
-                    }
-                });
+            if (!sendMessageButton) {
+                return;
             }
+            sendMessageButton.addEventListener('click', () => {
+                const messageInput = document.querySelector(contentSelector);
+                for (const key in AntiCensorPlugin.associations) {
+                    const value = AntiCensorPlugin.associations[key];
+                    const [from, to] = [key, value];
+                    const regex = new RegExp(from, 'gi');
+                    messageInput.value = messageInput.value.replace(regex, to);
+                }
+            });
         }
     }
 }
