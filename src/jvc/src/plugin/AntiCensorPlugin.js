@@ -32,7 +32,7 @@ export class AntiCensorPlugin {
             for (const key in AntiCensorPlugin.associations) {
                 const value = AntiCensorPlugin.associations[key];
                 const [from, to] = [value, key];
-                const regex = new RegExp(from, 'g');
+                const regex = new RegExp(`\\b${from}[.,;!?()'"-]?\\b`, 'gi');
                 if (innerHTML.match(regex)) {
                     innerHTML = innerHTML.replace(regex, to);
                     changed = true;
