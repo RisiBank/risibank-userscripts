@@ -57,7 +57,7 @@ export class AntiCensorPlugin {
                 for (const key in AntiCensorPlugin.associations) {
                     const value = AntiCensorPlugin.associations[key];
                     const [from, to] = [key, value];
-                    const regex = new RegExp(from, 'gi');
+                    const regex = new RegExp(`\\b${from}[.,;!?()'"-]?\\b`, 'gi');
                     messageInput.value = messageInput.value.replace(regex, to);
                 }
             });
