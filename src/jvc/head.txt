@@ -3,7 +3,7 @@
 // @namespace    risibank.fr
 // @description  La RisiBank intégrée sur JVC, comme par magie !
 // @author       RisiBank Admin
-// @version      1.2.34
+// @version      1.2.35
 // @website      https://risibank.fr
 // @homepage     https://risibank.fr
 // @match        https://www.jeuxvideo.com/forums/*
@@ -16,7 +16,7 @@
 // @match        https://m.jeuxvideo.com/forums/create_message.php*
 // @match        https://m.jeuxvideo.com/forums/*
 // @icon         https://risibank.fr/logo.png
-// @require      https://risibank.fr/downloads/web-api/risibank.js?1.2.34
+// @require      https://risibank.fr/downloads/web-api/risibank.js?1.2.35
 // @updateURL    https://risibank.fr/downloads/userscript/jvc/jvc.user.js
 // @downloadURL  https://risibank.fr/downloads/userscript/jvc/jvc.user.js
 // @run-at       document-start
