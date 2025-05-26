@@ -8,6 +8,7 @@ import { ImageOptimizerPlugin } from '../plugin/ImageOptimizerPlugin.js';
 import { JVCarePlugin } from '../plugin/JVCarePlugin.js';
 import { LinkEnhancerPlugin } from '../plugin/LinkEnhancerPlugin.js';
 import { MessageEditFormEnhancerPlugin } from '../plugin/MessageEditFormEnhancerPlugin.js';
+import { RemoveDisclaimerPlugin } from '../plugin/RemoveDisclaimerPlugin.js';
 import { YoutubePlugin } from '../plugin/YoutubePlugin.js';
 import { OptionsPanel } from './OptionsPanel.js';
 
@@ -40,6 +41,8 @@ export class RisiBankJVC {
 
         // Start plugins
         this.plugins = [];
+        // Link enhancer
+        this.plugins.push(new RemoveDisclaimerPlugin(this));
         // Device seed
         this.plugins.push(new DeviceSeedPlugin(this));
         // Handles jvcare

@@ -163,6 +163,13 @@ class ScriptOptions {
             default: () => false,
         },
         {
+            name: 'hideHarassmentPreventionBanner',
+            type: 'boolean',
+            label: 'Retirer le bandeau anti-harcèlement',
+            description: `Retirer le bandeau de prévention anti-harcèlement du formulaire de message`,
+            default: () => true,
+        },
+        {
             name: 'hideDonateButton',
             type: 'boolean',
             label: 'Masquer bouton donation (🐀)',
