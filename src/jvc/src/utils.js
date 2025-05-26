@@ -19,16 +19,13 @@ export const waitForFunction = async (fn, timeout) => {
 
 export function getSelectors(pageType) {
     let submitButtonSelector;
-    let contentSelector;
+    const contentSelector = '.messageEditor__edit';
     if (pageType === 'web') {
-        submitButtonSelector = '.btn.btn-poster-msg';
-        contentSelector = '#message_topic';
+        submitButtonSelector = 'button.postMessage';
     } else if (pageType === 'mp') {
-        submitButtonSelector = '.btn.btn-poster-msg';
-        contentSelector = '#message';
+        submitButtonSelector = 'button.js-post-message';
     } else if (pageType === 'mobile') {
-        submitButtonSelector = '.sub-form-fmobile';
-        contentSelector = '.area-form-fmobile';
+        submitButtonSelector = 'button.postMessage';
     } else {
         return null;
     }

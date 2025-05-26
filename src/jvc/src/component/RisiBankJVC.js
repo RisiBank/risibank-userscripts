@@ -1,15 +1,15 @@
-import { OptionsPanel } from './OptionsPanel.js';
 import { scriptOptions } from '../ScriptOptions.js';
-import { DeviceSeedPlugin } from '../plugin/DeviceSeedPlugin.js';
-import { JVCarePlugin } from '../plugin/JVCarePlugin.js';
-import { BetterJVC } from '../plugin/BetterJVC.js';
 import { AntiCensorPlugin } from '../plugin/AntiCensorPlugin.js';
-import { LinkEnhancerPlugin } from '../plugin/LinkEnhancerPlugin.js';
-import { ImageEnhancerPlugin } from '../plugin/ImageEnhancerPlugin.js';
-import { YoutubePlugin } from '../plugin/YoutubePlugin.js';
 import { AutoUpdatePlugin } from '../plugin/AutoUpdatePlugin.js';
-import { MessageEditFormEnhancerPlugin } from '../plugin/MessageEditFormEnhancerPlugin.js';
+import { BetterJVC } from '../plugin/BetterJVC.js';
+import { DeviceSeedPlugin } from '../plugin/DeviceSeedPlugin.js';
+import { ImageEnhancerPlugin } from '../plugin/ImageEnhancerPlugin.js';
 import { ImageOptimizerPlugin } from '../plugin/ImageOptimizerPlugin.js';
+import { JVCarePlugin } from '../plugin/JVCarePlugin.js';
+import { LinkEnhancerPlugin } from '../plugin/LinkEnhancerPlugin.js';
+import { MessageEditFormEnhancerPlugin } from '../plugin/MessageEditFormEnhancerPlugin.js';
+import { YoutubePlugin } from '../plugin/YoutubePlugin.js';
+import { OptionsPanel } from './OptionsPanel.js';
 
 
 /**
@@ -128,16 +128,16 @@ class RisiBankJVCView {
         // Identifies what selector to use to find the text area where to add the RisiBank plugin
         if (['mp'].includes(this.model.pageType)) {
             // MP
-            this.afterIntegrationSelector = '.form-post-topic .text-editor';
-            this.textAreaSelector = '.form-post-topic .text-editor textarea';
+            this.afterIntegrationSelector = '.messageEditor__edit';
+            this.textAreaSelector = '.messageEditor__edit';
         } else if (['web'].includes(this.model.pageType)) {
             // WWW
-            this.afterIntegrationSelector = '#bloc-formulaire-forum .text-editor';
-            this.textAreaSelector = '#bloc-formulaire-forum .text-editor textarea';
+            this.afterIntegrationSelector = '.messageEditor__edit';
+            this.textAreaSelector = '.messageEditor__edit';
         } else if (this.model.pageType === 'mobile') {
             // Mobile
-            this.afterIntegrationSelector = '.area-form-fmobile';
-            this.textAreaSelector = '.area-form-fmobile';
+            this.afterIntegrationSelector = '.messageEditor__edit';
+            this.textAreaSelector = '.messageEditor__edit';
         } else {
             throw new Error('Unknown page type');
         }
@@ -161,67 +161,29 @@ class RisiBankJVCView {
         }
 
         // Prepare the location for the RisiBank settings button
-        if (this.model.pageType === 'web') {
-            try {
-                const container = document.querySelector('#bloc-formulaire-forum .jv-editor-toolbar');
-                const div = document.createElement('div');
-                div.classList.add('risibank-cleanup');
-                div.classList.add('btn-group');
-                div.innerHTML = `
-                    <button class="btn btn-jv-editor-toolbar risibank-toggle" style="${this.model.getRisiBankIconState() ? '' : 'filter: grayscale(1);'}" type="button" title="Activer/désactiver le plugin RisiBank">
-                        <img src="https://risibank.fr/logo.png" width="14" height="14" style="vertical-align: text-top">
-                    </button>
-                    <button class="btn btn-jv-editor-toolbar risibank-open-options" type="button" title="Ouvrir les options du plugin" style="padding-top: 0;">
-                        ⚙
-                    </button>
-                `;
-                if (! scriptOptions.getOption('hideDonateButton')) {
-                    div.innerHTML += `
-                        <button class="btn btn-jv-editor-toolbar" onclick="window.open('https://www.buymeacoffee.com/risibank')" type="button" title="Cette extension a changé ta vie ? Change celle de celui qui a crée cette extension en lui offrant un café" style="padding-top: 0;">
-                            ☕
-                        </button>
-                    `;
-                }
-                container.appendChild(div);
-            } catch (error) {
-                console.warn('Unable to prepare the location for the RisiBank settings', error);
-            }
-        } else if (this.model.pageType === 'mp') {
-            try {
-                const container = document.querySelector('.form-post-topic .jv-editor-toolbar');
-                const div = document.createElement('div');
-                div.classList.add('risibank-cleanup');
-                div.classList.add('btn-group');
-                div.innerHTML = `
-                    <button class="btn btn-jv-editor-toolbar risibank-toggle" style="${this.model.getRisiBankIconState() ? '' : 'filter: grayscale(1);'}" type="button" title="Activer/désactiver le plugin RisiBank">
-                        <img src="https://risibank.fr/logo.png" width="14" height="14" style="vertical-align: text-top">
-                    </button>
-                    <button class="btn btn-jv-editor-toolbar risibank-open-options" type="button" title="Ouvrir les options du plugin" style="padding-top: 0;">
-                        ⚙
+        try {
+            const container = document.querySelector('.messageEditor__buttonEdit > .buttonsEditor');
+            const div = document.createElement('div');
+            div.classList.add('risibank-cleanup');
+            div.classList.add('buttonsEditor__group');
+            div.innerHTML = `
+                <button class="buttonsEditor__button risibank-toggle" style="${this.model.getRisiBankIconState() ? '' : 'filter: grayscale(1);'}" type="button" title="Activer/désactiver le plugin RisiBank">
+                    <img src="https://risibank.fr/logo.png" width="14" height="14" style="vertical-align: baseline;">
+                </button>
+                <button class="buttonsEditor__button risibank-open-options" type="button" title="Ouvrir les options du plugin" style="padding-top: 0;">
+                    ⚙
+                </button>
+            `;
+            if (! scriptOptions.getOption('hideDonateButton')) {
+                div.innerHTML += `
+                    <button class="buttonsEditor__button" onclick="window.open('https://www.buymeacoffee.com/risibank')" type="button" title="Cette extension a changé ta vie ? Change celle de celui qui a crée cette extension en lui offrant un café" style="padding-top: 0;">
+                        ☕
                     </button>
                 `;
-                container.appendChild(div);
-            } catch (error) {
-                console.warn('Unable to prepare the location for the RisiBank settings', error);
             }
-        } else if (this.model.pageType === 'mobile') {
-            try {
-                const container = document.querySelector('.bloc-opt-area');
-                container.style.display = 'flex';
-                const div = document.createElement('div');
-                div.style.marginLeft = '8px';
-                div.classList.add('risibank-cleanup');
-                div.classList.add('btn-group');
-                div.innerHTML = `
-                    <a href="javascript:void(0)" style="${this.model.getRisiBankIconState() ? '' : 'filter: grayscale(1);'}" class="risibank-toggle" title="Activer/désactiver le plugin RisiBank">
-                        <img src="https://risibank.fr/logo.png" width="28" height="28" style="vertical-align: text-top">
-                    </a>
-                `;
-                container.appendChild(div);
-                
-            } catch (error) {
-                console.warn('Unable to prepare the location for the RisiBank settings', error);
-            }
+            container.insertBefore(div, container.querySelector('.buttonsEditor__groupPreview'));
+        } catch (error) {
+            console.warn('Unable to prepare the location for the RisiBank settings', error);
         }
     }
 
@@ -241,6 +203,27 @@ class RisiBankJVCView {
         this.controller = new RisiBankJVCController(this.model, this);
     }
 
+    /**
+     * Emulate setting the value in a React input element.
+     * @param {HTMLTextAreaElement | HTMLInput} element 
+     * @param {string} value
+     */
+    setReactInputValue(element, value) {
+        const valueSetter = Object.getOwnPropertyDescriptor(element.__proto__, 'value')?.set;
+        const prototype = Object.getPrototypeOf(element);
+        const prototypeValueSetter = Object.getOwnPropertyDescriptor(prototype, 'value')?.set;
+    
+        if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
+            prototypeValueSetter.call(element, value);
+        } else if (valueSetter) {
+            valueSetter.call(element, value);
+        } else {
+            element.value = value;
+        }
+    
+        element.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
     startEmbed() {
         if (! document.querySelector(`#${this.iframeContainerId}`)) {
             return;
@@ -252,7 +235,11 @@ class RisiBankJVCView {
             defaultTab: scriptOptions.getOption('defaultTab'),
             mediaSize: scriptOptions.getOption('mediaSize'),
             navbarSize: scriptOptions.getOption('navbarSize'),
-            onSelectMedia: RisiBank.Actions.addSourceImageLink(this.textAreaSelector),
+            onSelectMedia: ({ media }) => {
+                const textArea = document.querySelector(this.textAreaSelector);
+                const newValue = textArea.value + ` ${media.source_url}`;
+                this.setReactInputValue(textArea, newValue);
+            },
         });
     }
 
@@ -263,10 +250,15 @@ class RisiBankJVCView {
             defaultTab: scriptOptions.getOption('defaultTab'),
             mediaSize: scriptOptions.getOption('mediaSize'),
             navbarSize: scriptOptions.getOption('navbarSize'),
-            onSelectMedia: RisiBank.Actions.addSourceImageLink(this.textAreaSelector),
+            onSelectMedia: ({ media }) => {
+                const textArea = document.querySelector(this.textAreaSelector);
+                const newValue = textArea.value + ` ${media.source_url}`;
+                this.setReactInputValue(textArea, newValue);
+            },
         });
     }
 }
+
 
 /**
  * Handles interactions with the view

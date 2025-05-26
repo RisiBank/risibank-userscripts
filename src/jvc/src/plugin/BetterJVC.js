@@ -15,8 +15,7 @@ export class BetterJVC {
         // Increase message form height
         if (scriptOptions.getOption('increaseMessageFormHeight')) {
             css.push(`
-                .area-form-fmobile { height: 18rem !important; }
-                .area-editor { height: 16rem !important; }
+                .messageEditor__edit { height: 18rem !important; }
             `);
         }
         // Install computed styles
