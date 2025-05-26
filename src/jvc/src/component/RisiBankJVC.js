@@ -128,22 +128,8 @@ class RisiBankJVCView {
             toCleanEl.remove();
         }
 
-        // Identifies what selector to use to find the text area where to add the RisiBank plugin
-        if (['mp'].includes(this.model.pageType)) {
-            // MP
-            this.afterIntegrationSelector = '.messageEditor__edit';
-            this.textAreaSelector = '.messageEditor__edit';
-        } else if (['web'].includes(this.model.pageType)) {
-            // WWW
-            this.afterIntegrationSelector = '.messageEditor__edit';
-            this.textAreaSelector = '.messageEditor__edit';
-        } else if (this.model.pageType === 'mobile') {
-            // Mobile
-            this.afterIntegrationSelector = '.messageEditor__edit';
-            this.textAreaSelector = '.messageEditor__edit';
-        } else {
-            throw new Error('Unknown page type');
-        }
+        this.afterIntegrationSelector = '.messageEditor__edit';
+        this.textAreaSelector = '.messageEditor__edit';
 
         // Globals
         this.iframeContainerId = 'risibank-container';
@@ -227,6 +213,34 @@ class RisiBankJVCView {
         element.dispatchEvent(new Event('input', { bubbles: true }));
     }
 
+    /**
+     * Add the source_url of a media to a React text area
+     */
+    addImageLinkToTextArea({ media }) {
+        const formElement = document.querySelector(this.textAreaSelector);
+        const link = media.source_url;
+
+        // Get cursor position
+        const cursorIndex = formElement.selectionStart;
+
+        // Decide whether to append and prepend spaces
+        const preprendSpace = formElement.value[cursorIndex - 1] && !formElement.value[cursorIndex - 1].match(/\s/);
+        const appendSpace = typeof formElement.value[cursorIndex] === 'undefined' || !formElement.value[cursorIndex].match(/\s/);
+
+        // Build text to add
+        const added = `${preprendSpace ? ' ' : ''}${link}${appendSpace ? ' ' : ''}`;
+
+        // Insert link where cursor is
+        this.setReactInputValue(formElement,
+            formElement.value.substring(0, formElement.selectionStart) +
+            added +
+            formElement.value.substring(formElement.selectionStart)
+        );
+
+        // Re-focus the text area
+        formElement.focus();
+    }
+
     startEmbed() {
         if (! document.querySelector(`#${this.iframeContainerId}`)) {
             return;
@@ -238,11 +252,7 @@ class RisiBankJVCView {
             defaultTab: scriptOptions.getOption('defaultTab'),
             mediaSize: scriptOptions.getOption('mediaSize'),
             navbarSize: scriptOptions.getOption('navbarSize'),
-            onSelectMedia: ({ media }) => {
-                const textArea = document.querySelector(this.textAreaSelector);
-                const newValue = textArea.value + ` ${media.source_url}`;
-                this.setReactInputValue(textArea, newValue);
-            },
+            onSelectMedia: this.addImageLinkToTextArea.bind(this),
         });
     }
 
@@ -253,11 +263,7 @@ class RisiBankJVCView {
             defaultTab: scriptOptions.getOption('defaultTab'),
             mediaSize: scriptOptions.getOption('mediaSize'),
             navbarSize: scriptOptions.getOption('navbarSize'),
-            onSelectMedia: ({ media }) => {
-                const textArea = document.querySelector(this.textAreaSelector);
-                const newValue = textArea.value + ` ${media.source_url}`;
-                this.setReactInputValue(textArea, newValue);
-            },
+            onSelectMedia: this.addImageLinkToTextArea.bind(this),
         });
     }
 }
