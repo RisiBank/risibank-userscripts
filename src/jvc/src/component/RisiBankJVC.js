@@ -128,8 +128,15 @@ class RisiBankJVCView {
             toCleanEl.remove();
         }
 
-        this.afterIntegrationSelector = '.messageEditor__edit';
-        this.textAreaSelector = '.messageEditor__edit';
+        // Identifies what selector to use to find the text area where to add the RisiBank plugin
+        if (['web'].includes(this.model.pageType)) {
+            // WWW
+            this.afterIntegrationSelector = '#bloc-formulaire-forum .messageEditor__edit';
+            this.textAreaSelector = '#bloc-formulaire-forum .messageEditor__edit';
+        } else {
+            this.afterIntegrationSelector = '.messageEditor__edit';
+            this.textAreaSelector = '.messageEditor__edit';
+        }
 
         // Globals
         this.iframeContainerId = 'risibank-container';
