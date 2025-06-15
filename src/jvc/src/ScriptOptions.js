@@ -51,7 +51,8 @@ class ScriptOptions {
             name: 'embedType',
             type: 'select',
             values: [
-                { value: 'iframe', 'label': 'intégré' },
+                { value: 'iframe', 'label': 'intégré (Haut)' },
+                { value: 'iframe-bottom', 'label': 'intégré (Bas)' },
                 { value: 'overlay', 'label': 'overlay' },
             ],
             label: 'Mode d\'intégration',
@@ -70,7 +71,7 @@ class ScriptOptions {
             label: 'Hauteur fenêtre mode intégré',
             description: `Choisir la taille de la zone de contenu dans l\'interface RisiBank (mode intégré)`,
             default: () => '165px',
-            activateIf: options => options.embedType === 'iframe',
+            activateIf: options => ['iframe', 'iframe-bottom'].includes(options.embedType),
         },
         {
             name: 'mediaSize',
