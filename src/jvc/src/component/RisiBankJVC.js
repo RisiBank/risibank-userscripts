@@ -149,7 +149,11 @@ class RisiBankJVCView {
                 div.id = this.iframeContainerId;
                 div.classList.add('risibank-cleanup');
                 div.style.height = scriptOptions.getOption('embeddedContainerHeight');
-                afterIntegrationEl.parentElement.insertBefore(div, afterIntegrationEl);
+                if (scriptOptions.getOption('embedType') === 'iframe-bottom') {
+                    afterIntegrationEl.parentElement.appendChild(div);
+                } else {
+                    afterIntegrationEl.parentElement.insertBefore(div, afterIntegrationEl);
+                }
             } catch (error) {
                 console.warn('Unable to prepare location for the RisiBank embed', error);
             }
