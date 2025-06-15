@@ -12,10 +12,12 @@ import { RemoveDisclaimerPlugin } from '../plugin/RemoveDisclaimerPlugin.js';
 import { YoutubePlugin } from '../plugin/YoutubePlugin.js';
 import { OptionsPanel } from './OptionsPanel.js';
 
-
 /**
  * Main class to control the RisiBank JVC userscript
  */
+
+const embedIframeModes = ['iframe', 'iframe-bottom'];
+
 export class RisiBankJVC {
 
     constructor() {
@@ -128,7 +130,11 @@ class RisiBankJVCView {
             toCleanEl.remove();
         }
 
-        this.afterIntegrationSelector = '.messageEditor__edit';
+        if (scriptOptions.getOption('embedType') === 'iframe-bottom') {
+            this.afterIntegrationSelector = '.messageEditor__buttonEdit';
+        } else {
+            this.afterIntegrationSelector = '.messageEditor__edit';
+        }
         this.textAreaSelector = '.messageEditor__edit';
 
         // Globals
@@ -136,7 +142,7 @@ class RisiBankJVCView {
 
         // Prepare the location where the RisiBank embed will be integrated
         // Only add the iframe container if integration mode is iframe
-        if ((scriptOptions.getOption('embedType') === 'iframe') && (scriptOptions.getOption('enabled'))) {
+        if (embedIframeModes.includes(scriptOptions.getOption('embedType')) && scriptOptions.getOption('enabled')) {
             try {
                 const afterIntegrationEl = document.querySelector(this.afterIntegrationSelector);
                 const div = document.createElement('div');
@@ -185,7 +191,7 @@ class RisiBankJVCView {
         this.mount();
 
         // Start embed if iframe mode
-        if ((scriptOptions.getOption('embedType')) === 'iframe' && (scriptOptions.getOption('enabled'))) {
+        if (embedIframeModes.includes(scriptOptions.getOption('embedType')) && scriptOptions.getOption('enabled')) {
             this.startEmbed();
         }
 
@@ -285,7 +291,7 @@ class RisiBankJVCController {
         // RisiBank button to toggle plugin
         const toggleRisiBankButtons = Array.from(document.querySelectorAll('.risibank-toggle'));
         for (const toggleRisiBankButton of toggleRisiBankButtons) {
-            if ((scriptOptions.getOption('embedType')) === 'iframe') {
+            if (embedIframeModes.includes(scriptOptions.getOption('embedType'))) {
                 toggleRisiBankButton.addEventListener('click', async () => {
                     await scriptOptions.saveOption('enabled', ! (scriptOptions.getOption('enabled')));
                     this.view.init();
