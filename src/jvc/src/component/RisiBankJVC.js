@@ -1,3 +1,4 @@
+const { RisiBank } = require('risibank-web-api');
 import { scriptOptions } from '../ScriptOptions.js';
 import { AntiCensorPlugin } from '../plugin/AntiCensorPlugin.js';
 import { AutoUpdatePlugin } from '../plugin/AutoUpdatePlugin.js';

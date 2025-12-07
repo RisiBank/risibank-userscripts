@@ -1,3 +1,4 @@
+const { RisiBank } = require('risibank-web-api');
 const { scriptOptions } = require('../ScriptOptions.js');
 const { waitForFunction } = require('../utils.js');
 

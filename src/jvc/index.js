@@ -3,7 +3,6 @@ const { scriptOptions } = require('./src/ScriptOptions.js');
 const { RisiBankJVC } = require('./src/component/RisiBankJVC.js');
 const { waitForFunction } = require('./src/utils.js');
 
-
 async function init () {
 
     await scriptOptions.load();
