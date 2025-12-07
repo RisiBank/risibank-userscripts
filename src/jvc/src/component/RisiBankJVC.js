@@ -245,6 +245,7 @@ class RisiBankJVCView {
         if (! document.querySelector(`#${this.iframeContainerId}`)) {
             return;
         }
+        console.log('Starting RisiBank embed...', scriptOptions);
         RisiBank.activate({
             type: 'iframe',
             container: '#' + this.iframeContainerId,
@@ -253,6 +254,7 @@ class RisiBankJVCView {
             mediaSize: scriptOptions.getOption('mediaSize'),
             navbarSize: scriptOptions.getOption('navbarSize'),
             onSelectMedia: this.addImageLinkToTextArea.bind(this),
+            showNSFW: scriptOptions.getOption('showNSFW'),
         });
     }
 
@@ -264,6 +266,7 @@ class RisiBankJVCView {
             mediaSize: scriptOptions.getOption('mediaSize'),
             navbarSize: scriptOptions.getOption('navbarSize'),
             onSelectMedia: this.addImageLinkToTextArea.bind(this),
+            showNSFW: scriptOptions.getOption('showNSFW'),
         });
     }
 }

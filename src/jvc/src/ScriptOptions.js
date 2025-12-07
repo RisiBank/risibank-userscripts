@@ -73,6 +73,13 @@ class ScriptOptions {
             activateIf: options => options.embedType === 'iframe',
         },
         {
+            name: 'showNSFW',
+            type: 'boolean',
+            label: 'Inclure le contenu NSFW',
+            description: `Voulez-vous voir le NSFW (Not Safe For Work) dans les résultats de recherche et les différents onglets ?`,
+            default: () => false,
+        },
+        {
             name: 'mediaSize',
             type: 'select',
             values: [
