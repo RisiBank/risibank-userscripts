@@ -31,7 +31,7 @@ export class LinkEnhancerPlugin {
             const mediaExt = link.href.match('-media-(\\w+)$')[1];
             const mediaUrl = this.model.getRisiBankImageUrl(mediaId, mediaExt);
             link.innerHTML = `
-                <img class="img-shack" width="68" height="51" src="${mediaUrl}">
+                <img class="message__urlImg" width="68" height="51" src="${mediaUrl}">
             `;
         });
     }

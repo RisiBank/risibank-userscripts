@@ -3,7 +3,7 @@
 // @namespace    risibank.fr
 // @description  La RisiBank intégrée sur JVC, comme par magie !
 // @author       RisiBank Admin
-// @version      1.3.3
+// @version      1.3.4
 // @website      https://risibank.fr
 // @homepage     https://risibank.fr
 // @match        https://www.jeuxvideo.com/forums/*

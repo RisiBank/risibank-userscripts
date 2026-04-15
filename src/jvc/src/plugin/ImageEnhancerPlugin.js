@@ -13,7 +13,7 @@ export class ImageEnhancerPlugin {
 
     async install() {
         // Find all potential NS images
-        let images = Array.from(document.querySelectorAll('img.img-shack'));
+        let images = Array.from(document.querySelectorAll('img.message__urlImg'));
         // Normalize images (replaces noelshack links with the direct link to the image)
         const replaceRegExps = {
             '^https://www.noelshack.com/(2022|2021|2020|2019)-(\\d+)-(\\d+)-([\\w\\[\\]\\._-]+)$': 'https://image.noelshack.com/fichiers/$1/$2/$3/$4',
