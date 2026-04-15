@@ -10,7 +10,6 @@ import { JVCarePlugin } from '../plugin/JVCarePlugin.js';
 import { LinkEnhancerPlugin } from '../plugin/LinkEnhancerPlugin.js';
 import { MessageEditFormEnhancerPlugin } from '../plugin/MessageEditFormEnhancerPlugin.js';
 import { RemoveDisclaimerPlugin } from '../plugin/RemoveDisclaimerPlugin.js';
-import { YoutubePlugin } from '../plugin/YoutubePlugin.js';
 import { OptionsPanel } from './OptionsPanel.js';
 
 
@@ -56,8 +55,6 @@ export class RisiBankJVC {
         this.plugins.push(new LinkEnhancerPlugin(this));
         // Image optimizer
         this.plugins.push(new ImageOptimizerPlugin(this));
-        // Youtube
-        this.plugins.push(new YoutubePlugin(this));
         // Update
         this.plugins.push(new AutoUpdatePlugin(this));
         // Misc

@@ -87,7 +87,7 @@ class ScriptOptions {
                 { value: 'md', label: 'moyen' },
                 { value: 'lg', label: 'grand' },
             ],
-            label: 'Taille des images',
+            label: 'Taille des images dans l\'intégration',
             description: `Choisir la taille des images dans l\'interface RisiBank`,
             default: () => 'sm',
         },
@@ -127,8 +127,8 @@ class ScriptOptions {
         {
             name: 'animateGifs',
             type: 'boolean',
-            label: 'Animer les GIFs',
-            description: `Anime les GIFs (Consomme de la bande passante).`,
+            label: 'Animer les images GIFs',
+            description: `Anime les images GIFs (Consomme de la bande passante).`,
             default: () => true,
         },
         {
@@ -139,21 +139,6 @@ class ScriptOptions {
             values: [true, false],
             default: () => true,
             activateIf: options => options.addTransparency || options.animateGifs,
-        },
-        {
-            name: 'embedYoutubeLinks',
-            type: 'boolean',
-            label: `Intégration des vidéos youtube`,
-            description: `Lecteur intégré YouTube`,
-            values: [true, false],
-            default: () => true,
-        },
-        {
-            name: 'antiCensorPlugin',
-            type: 'boolean',
-            label: 'Plugin anti-censure (textuel)',
-            description: `Remplace automatiquement certains mots clefs sensibles d'une manière transparente pour ceux qui ont l'userscript`,
-            default: () => true,
         },
         {
             name: 'autoUpdate',
@@ -174,6 +159,13 @@ class ScriptOptions {
             type: 'boolean',
             label: 'Retirer le bandeau anti-harcèlement',
             description: `Retirer le bandeau de prévention anti-harcèlement du formulaire de message`,
+            default: () => true,
+        },
+        {
+            name: 'antiCensorPlugin',
+            type: 'boolean',
+            label: 'Plugin anti-censure (textuel)',
+            description: `Remplace automatiquement certains mots clefs sensibles d'une manière transparente pour ceux qui ont l'userscript`,
             default: () => true,
         },
         {
