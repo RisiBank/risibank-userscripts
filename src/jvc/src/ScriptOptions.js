@@ -106,6 +106,7 @@ class ScriptOptions {
         {
             name: 'redirectToRisiBank',
             type: 'boolean',
+            separator: true,
             label: 'Rediriger les stickers vers RisiBank',
             description: `Lors d'un clic sur un sticker noelshack, rediriger vers RisiBank si le sticker existe plutôt que noelshack`,
             default: () => true,
@@ -143,6 +144,7 @@ class ScriptOptions {
         {
             name: 'autoUpdate',
             type: 'boolean',
+            separator: true,
             label: 'Mise à jour auto',
             description: `Vérifier automatiquement les mises à jour du script`,
             default: () => true,
@@ -150,6 +152,7 @@ class ScriptOptions {
         {
             name: 'increaseMessageFormHeight',
             type: 'boolean',
+            separator: true,
             label: 'Augmenter taille zone message',
             description: `Augmente la taille par défaut de la zone de message`,
             default: () => false,

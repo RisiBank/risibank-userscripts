@@ -78,6 +78,15 @@ class View {
             if (option.activateIf && ! option.activateIf(scriptOptions.options)) {
                 continue;
             }
+            if (option.separator) {
+                html += `
+                <tr>
+                    <td colspan="3" style="padding: 8px 0;">
+                        <hr style="border: none; border-top: 1px solid currentColor; opacity: 0.2;">
+                    </td>
+                </tr>
+                `;
+            }
             html += `
                 <tr style="height: 28px">
                     <td style="width: 20px;">
