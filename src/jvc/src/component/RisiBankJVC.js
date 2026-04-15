@@ -216,7 +216,7 @@ class RisiBankJVCView {
      */
     addImageLinkToTextArea({ media }) {
         const formElement = document.querySelector(this.textAreaSelector);
-        const link = media.source_url;
+        const link = media.source_url + (scriptOptions.getOption('appendStickerHash') ? '#sticker' : '');
 
         // Get cursor position
         const cursorIndex = formElement.selectionStart;

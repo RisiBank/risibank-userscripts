@@ -142,6 +142,27 @@ class ScriptOptions {
             activateIf: options => options.addTransparency || options.animateGifs,
         },
         {
+            name: 'appendStickerHash',
+            type: 'boolean',
+            label: 'Poster en format sticker',
+            description: `Ajoute #sticker à la fin des liens noelshack postés via RisiBank pour les afficher au format sticker`,
+            default: () => true,
+        },
+        {
+            name: 'shrinkJvcStickers',
+            type: 'boolean',
+            label: `Rendre les images "sticker" JVC légèrement plus petites`,
+            description: `Les images au nouveau format "sticker" de JVC sont affichées plus petites, proches de la taille des images classiques`,
+            default: () => true,
+        },
+        {
+            name: 'shrinkJvcLargeImages',
+            type: 'boolean',
+            label: 'Réduire les grandes images en stickers',
+            description: `Affiche les grandes images au format sticker plutôt qu'en pleine largeur`,
+            default: () => true,
+        },
+        {
             name: 'autoUpdate',
             type: 'boolean',
             separator: true,

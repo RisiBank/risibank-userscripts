@@ -39,6 +39,22 @@ export class ImageEnhancerPlugin {
             // Create a unique ID for this image
             const id = ++ currentImageId;
             image.setAttribute('risibank-id', id);
+
+            // Downsize large images to sticker format
+            if (scriptOptions.getOption('shrinkJvcLargeImages') && image.classList.contains('message__urlImgLarge')) {
+                // Drop lg srcset candidate so the browser picks a smaller source
+                if (image.srcset) {
+                    image.srcset = image.srcset.split(',').filter(s => !s.includes('-lg/')).join(',');
+                }
+                // Swap to sticker class so JVC's native sticker CSS applies
+                image.classList.remove('message__urlImgLarge');
+                image.classList.add('message__urlImgSticker');
+            }
+            // Compact sticker images (including large images converted above)
+            if (scriptOptions.getOption('shrinkJvcStickers') && image.classList.contains('message__urlImgSticker')) {
+                image.sizes = '90px';
+            }
+
             // Is the media known by the image optimizer?
             const cachedMedia = this.imageOptimizer.cached[image.alt];
             // Change the link associated to this image to redirect to RisiBank
@@ -51,6 +67,11 @@ export class ImageEnhancerPlugin {
             }
             // Save original src attribute
             image.setAttribute('risibank-original-src', image.src);
+            // Sticker/large images already have transparent srcset variants, skip src replacement
+            if (image.srcset) {
+                this.addImageButtons(image);
+                continue;
+            }
             // Decide whether we need to replace the image src
             let replaceByFull = false;
             // Animate GIFs (GIFs have their src pointing to a fixed image, but the img alt attribute points to the real GIF)
