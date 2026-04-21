@@ -75,13 +75,15 @@ export const installStyles = async (css) => {
 export const installDefaultStyles = async () => {
     let extraCss = '';
     if (scriptOptions.getOption('shrinkJvcLargeImages')) {
-        // Override large image styles to match sticker styles, preventing a flash before the JS class swap
-        extraCss += 'img.message__urlImgLarge { width: auto !important; max-width: 40% !important; max-height: 25rem !important; min-width: 9.375rem !important; min-height: 3.125rem !important; object-fit: initial !important; background: initial !important; }';
+        // Shrink JVC's large-image block (now a <span> with background-image + padding-bottom 56.25%).
+        // Override JVC's width:100% + padding-bottom + #000 bg. Per-image aspect-ratio is set from JS.
+        // aspect-ratio below is a fallback used while the probe image loads; JS overrides with setProperty(..., 'important').
+        extraCss += '.message__urlImgLarge { width: 100% !important; max-width: 25rem !important; min-width: 9.375rem !important; max-height: 25rem !important; padding-bottom: 0 !important; aspect-ratio: 16 / 9; background-color: transparent !important; }';
     }
     if (scriptOptions.getOption('shrinkJvcStickers')) {
         let selector = 'img.message__urlImgSticker';
         if (scriptOptions.getOption('shrinkJvcLargeImages')) {
-            selector += ', img.message__urlImgLarge';
+            selector += ', .message__urlImgLarge';
         }
         extraCss += `${selector} { width: 90px !important; min-width: 0 !important; height: auto !important; }`;
     }

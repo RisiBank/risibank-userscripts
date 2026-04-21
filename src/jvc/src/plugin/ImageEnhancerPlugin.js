@@ -12,6 +12,21 @@ export class ImageEnhancerPlugin {
     }
 
     async install() {
+        // JVC's new large-image markup: <a><span class="message__urlImgLarge" style="background-image:..."></span></a>
+        // Spans have no src/alt/srcset, so they can't flow through the <img> pipeline below
+        const shrinkLarge = scriptOptions.getOption('shrinkJvcLargeImages');
+        for (const span of document.querySelectorAll('span.message__urlImgLarge')) {
+            const link = span.parentElement;
+            if (! link || ! link.href) continue;
+            if (! link.href.match(/^https:\/\/(image|www)\.noelshack\.com\//)) continue;
+            this.addFavoriteButtonToLink(link, link.href);
+            // Preserve the image's own aspect ratio when shrinking (spans have no intrinsic dimensions)
+            // Probe from link.href — span.style.backgroundImage is empty at load time for out-of-viewport lazy images
+            if (shrinkLarge) {
+                this.probeSpanAspectRatio(span, link.href);
+            }
+        }
+
         // Find all potential NS images
         let images = Array.from(document.querySelectorAll('img.message__urlImg'));
         // Normalize images (replaces noelshack links with the direct link to the image)
@@ -206,6 +221,51 @@ export class ImageEnhancerPlugin {
         // Bind buttons
         image.parentElement.querySelector('.add').addEventListener('click', event => {
             window.open('https://risibank.fr/api/v1/medias/by-source?type=jvc&redirect_to=web-add&url=' + image.alt, '_blank');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+    }
+
+    probeSpanAspectRatio(span, fullUrl) {
+        // Derive the xs thumbnail (small, cheap to probe); fall back to the full URL if xs doesn't exist.
+        const candidates = [];
+        let m = fullUrl.match(/^https:\/\/image\.noelshack\.com\/fichiers\/(.+)$/);
+        if (m) candidates.push(`https://image.noelshack.com/fichiers-xs/${m[1]}`);
+        m = fullUrl.match(/^https:\/\/www\.noelshack\.com\/(\d+)-(\d+)-(\d+)-(.+)$/);
+        if (m) candidates.push(`https://image.noelshack.com/fichiers-xs/${m[1]}/${m[2]}/${m[3]}/${m[4]}`);
+        candidates.push(fullUrl);
+
+        const tryNext = index => {
+            if (index >= candidates.length) return;
+            const probe = new Image();
+            probe.addEventListener('load', () => {
+                if (probe.naturalWidth && probe.naturalHeight) {
+                    span.style.setProperty('aspect-ratio', `${probe.naturalWidth} / ${probe.naturalHeight}`, 'important');
+                }
+            });
+            probe.addEventListener('error', () => tryNext(index + 1));
+            probe.src = candidates[index];
+        };
+        tryNext(0);
+    }
+
+    addFavoriteButtonToLink(link, fullUrl) {
+        if (! scriptOptions.getOption('addImageFavoriteButton')) {
+            return;
+        }
+        // Force inline-block so width:100% on the absolute button matches the span, not the line-box
+        link.style.display = 'inline-block';
+        link.style.position = 'relative';
+        link.classList.add('risibank-image-enhancer-link');
+        link.insertAdjacentHTML('beforeend', `
+            <div class="risibank-image-enhancer-buttons">
+                <button class="add" title="Ajouter à mes favoris">
+                    ⭐
+                </button>
+            </div>
+        `);
+        link.querySelector('.add').addEventListener('click', event => {
+            window.open('https://risibank.fr/api/v1/medias/by-source?type=jvc&redirect_to=web-add&url=' + fullUrl, '_blank');
             event.preventDefault();
             event.stopPropagation();
         });
