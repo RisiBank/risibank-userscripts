@@ -3,3 +3,6 @@
 //   export const RISIBANK_URL = 'https://risibank.fr';
 // Use a bare origin (scheme + host + port), no trailing slash.
 export const RISIBANK_URL = 'https://risibank.fr';
+
+// RISIBANK_URL escaped for safe use inside a RegExp (special chars like '.' are backslash-escaped).
+export const RISIBANK_URL_ESCAPED = RISIBANK_URL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

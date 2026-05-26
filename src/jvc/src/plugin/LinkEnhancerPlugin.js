@@ -1,4 +1,4 @@
-import { RISIBANK_URL } from '../config.js';
+import { RISIBANK_URL, RISIBANK_URL_ESCAPED } from '../config.js';
 
 
 export class LinkEnhancerPlugin {
@@ -10,8 +10,7 @@ export class LinkEnhancerPlugin {
     async install() {
         // Find all potential links to RisiBank images
         let links = Array.from(document.querySelectorAll('a.xXx'));
-        // RisiBank origin, escaped for safe use inside a RegExp
-        const base = RISIBANK_URL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const base = RISIBANK_URL_ESCAPED;
         // Normalize links pointing to different risibank resources to pointing to the full URL
         const replaceRegExps = {
             [`^${base}/cache/medias/([\\d/]+)/([\\d]+)/(\\w+)\\.(\\w+)$`]: `${RISIBANK_URL}/media/$2-media-$4`,
