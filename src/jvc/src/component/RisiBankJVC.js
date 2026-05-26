@@ -1,4 +1,5 @@
 const { RisiBank } = require('risibank-web-api');
+import { RISIBANK_URL } from '../config.js';
 import { scriptOptions } from '../ScriptOptions.js';
 import { AntiCensorPlugin } from '../plugin/AntiCensorPlugin.js';
 import { AutoUpdatePlugin } from '../plugin/AutoUpdatePlugin.js';
@@ -11,6 +12,10 @@ import { LinkEnhancerPlugin } from '../plugin/LinkEnhancerPlugin.js';
 import { MessageEditFormEnhancerPlugin } from '../plugin/MessageEditFormEnhancerPlugin.js';
 import { RemoveDisclaimerPlugin } from '../plugin/RemoveDisclaimerPlugin.js';
 import { OptionsPanel } from './OptionsPanel.js';
+
+// Point the embed (iframe src + postMessage origin check) at the configured instance.
+// RisiBank.Constants is the live class the package reads internally, so mutating it here repoints the embed.
+RisiBank.Constants.RISIBANK_URL = RISIBANK_URL;
 
 
 /**
@@ -86,7 +91,7 @@ export class RisiBankJVC {
      * @returns {String} Absolute url to the media image location
      */
     getRisiBankImageUrl(mediaId, extension) {
-        return `https://risibank.fr/cache/medias/${Math.floor(mediaId / 1e6)}/${Math.floor(mediaId / 1e4)}/${Math.floor(mediaId / 1e2)}/${mediaId}/full.${extension}`;
+        return `${RISIBANK_URL}/cache/medias/${Math.floor(mediaId / 1e6)}/${Math.floor(mediaId / 1e4)}/${Math.floor(mediaId / 1e2)}/${mediaId}/full.${extension}`;
     }
 
     /**
@@ -155,7 +160,7 @@ class RisiBankJVCView {
             div.classList.add('buttonsEditor__group');
             div.innerHTML = `
                 <button class="buttonsEditor__button risibank-toggle" style="${this.model.getRisiBankIconState() ? '' : 'filter: grayscale(1);'}" type="button" title="Activer/désactiver le plugin RisiBank">
-                    <img src="https://risibank.fr/logo.png" width="14" height="14" style="vertical-align: baseline;">
+                    <img src="${RISIBANK_URL}/logo.png" width="14" height="14" style="vertical-align: baseline;">
                 </button>
                 <button class="buttonsEditor__button risibank-open-options" type="button" title="Ouvrir les options du plugin" style="padding-top: 0;">
                     ⚙

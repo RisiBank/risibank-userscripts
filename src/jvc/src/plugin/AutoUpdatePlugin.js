@@ -1,6 +1,7 @@
 import { scriptOptions } from '../ScriptOptions.js';
 import { storage } from '../storage.js';
 import { apiGet } from '../requests.js';
+import { RISIBANK_URL } from '../config.js';
 import { DeviceSeedPlugin } from './DeviceSeedPlugin.js';
 
 
@@ -11,7 +12,7 @@ export class AutoUpdatePlugin {
 
     static UPDATE_DELAY = 1000 * 60 * 15;
 
-    static UPDATE_LINK = 'https://risibank.fr/downloads/userscript/jvc/jvc.user.js?from=userscript-jvc';
+    static UPDATE_LINK = `${RISIBANK_URL}/downloads/userscript/jvc/jvc.user.js?from=userscript-jvc`;
 
     constructor(model) {
         this.model = model;
