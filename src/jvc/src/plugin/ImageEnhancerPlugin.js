@@ -1,5 +1,6 @@
 const { scriptOptions } = require('../ScriptOptions.js');
 const { loadImage } = require('../requests.js');
+const { RISIBANK_URL } = require('../config.js');
 const { ImageOptimizerPlugin } = require('./ImageOptimizerPlugin.js');
 
 
@@ -75,9 +76,9 @@ export class ImageEnhancerPlugin {
             // Change the link associated to this image to redirect to RisiBank
             if (scriptOptions.getOption('redirectToRisiBank')) {
                 if (cachedMedia) {
-                    image.parentElement.href = `https://risibank.fr/media/${cachedMedia.id}-${cachedMedia.slug}`;
+                    image.parentElement.href = `${RISIBANK_URL}/media/${cachedMedia.id}-${cachedMedia.slug}`;
                 } else {
-                    image.parentElement.href = 'https://risibank.fr/api/v1/medias/by-source?type=jvc&url=' + image.alt
+                    image.parentElement.href = `${RISIBANK_URL}/api/v1/medias/by-source?type=jvc&url=` + image.alt
                 }
             }
             // Save original src attribute
@@ -136,7 +137,7 @@ export class ImageEnhancerPlugin {
     async replaceImageByFull(id, newSrc) {
 
         const cancel = image => {
-            image.src = 'https://risibank.fr/cache/medias/0/5/512/51206/thumb.png';
+            image.src = `${RISIBANK_URL}/cache/medias/0/5/512/51206/thumb.png`;
             image.parentElement.insertAdjacentHTML('beforeend', `[Média supprimé]`);
         };
 
@@ -185,7 +186,7 @@ export class ImageEnhancerPlugin {
 
             // 4] Try to get the RisiBank version
             try {
-                const blob = await loadImage('https://risibank.fr/api/v1/medias/by-source?type=jvc&redirect_to=image&url=' + newSrc);
+                const blob = await loadImage(`${RISIBANK_URL}/api/v1/medias/by-source?type=jvc&redirect_to=image&url=` + newSrc);
                 image = this.replaceImageByBlob(id, blob);
                 this.addImageButtons(image);
             } catch (error) {
@@ -220,7 +221,7 @@ export class ImageEnhancerPlugin {
         `);
         // Bind buttons
         image.parentElement.querySelector('.add').addEventListener('click', event => {
-            window.open('https://risibank.fr/api/v1/medias/by-source?type=jvc&redirect_to=web-add&url=' + image.alt, '_blank');
+            window.open(`${RISIBANK_URL}/api/v1/medias/by-source?type=jvc&redirect_to=web-add&url=` + image.alt, '_blank');
             event.preventDefault();
             event.stopPropagation();
         });
@@ -265,7 +266,7 @@ export class ImageEnhancerPlugin {
             </div>
         `);
         link.querySelector('.add').addEventListener('click', event => {
-            window.open('https://risibank.fr/api/v1/medias/by-source?type=jvc&redirect_to=web-add&url=' + fullUrl, '_blank');
+            window.open(`${RISIBANK_URL}/api/v1/medias/by-source?type=jvc&redirect_to=web-add&url=` + fullUrl, '_blank');
             event.preventDefault();
             event.stopPropagation();
         });

@@ -1,3 +1,4 @@
+import { RISIBANK_URL } from '../config.js';
 
 
 export class LinkEnhancerPlugin {
@@ -9,10 +10,12 @@ export class LinkEnhancerPlugin {
     async install() {
         // Find all potential links to RisiBank images
         let links = Array.from(document.querySelectorAll('a.xXx'));
+        // RisiBank origin, escaped for safe use inside a RegExp
+        const base = RISIBANK_URL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         // Normalize links pointing to different risibank resources to pointing to the full URL
         const replaceRegExps = {
-            '^https://risibank.fr/cache/medias/([\\d/]+)/([\\d]+)/(\\w+)\\.(\\w+)$': 'https://risibank.fr/media/$2-media-$4',
-            '^https://risibank.fr/cache/stickers/d([\\d]+)/([\\d]+)-(\\w+)\\.(\\w+)$': 'https://risibank.fr/media/$2-media-$4',
+            [`^${base}/cache/medias/([\\d/]+)/([\\d]+)/(\\w+)\\.(\\w+)$`]: `${RISIBANK_URL}/media/$2-media-$4`,
+            [`^${base}/cache/stickers/d([\\d]+)/([\\d]+)-(\\w+)\\.(\\w+)$`]: `${RISIBANK_URL}/media/$2-media-$4`,
         };
         links = links.map(link => {
             for (const regexp in replaceRegExps) {
@@ -24,7 +27,7 @@ export class LinkEnhancerPlugin {
             return link;
         });
         // Filter out non-risibank links
-        links = links.filter(link => !! link.href.match('^https://risibank.fr/media/(\\d+)-media-(\\w+)$'));
+        links = links.filter(link => !! link.href.match(`^${base}/media/(\\d+)-media-(\\w+)$`));
         // Replace text content by an image
         links.forEach(link => {
             const mediaId = parseInt(link.href.match('/(\\d+)-media')[1]);

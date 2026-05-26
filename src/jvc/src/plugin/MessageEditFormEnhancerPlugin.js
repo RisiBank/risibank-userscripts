@@ -1,5 +1,6 @@
 const { RisiBank } = require('risibank-web-api');
 const { scriptOptions } = require('../ScriptOptions.js');
+const { RISIBANK_URL } = require('../config.js');
 const { wait, waitForFunction } = require('../utils.js');
 
 
@@ -38,7 +39,7 @@ export class MessageEditFormEnhancerPlugin {
         div.classList.add('buttonsEditor__group');
         div.innerHTML = `
             <button class="buttonsEditor__button risibank-form-edit-toggle" style="${this.model.getRisiBankIconState() ? '' : 'filter: grayscale(1);'}" type="button" title="Ouvrir l'overlay RisiBank">
-                <img src="https://risibank.fr/logo.png" width="14" height="14" style="vertical-align: baseline;">
+                <img src="${RISIBANK_URL}/logo.png" width="14" height="14" style="vertical-align: baseline;">
             </button>
         `;
         toolbarDiv.insertBefore(div, toolbarDiv.querySelector('.buttonsEditor__groupPreview'));

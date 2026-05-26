@@ -1,4 +1,5 @@
 const { scriptOptions } = require('../ScriptOptions.js');
+const { RISIBANK_URL } = require('../config.js');
 
 
 
@@ -143,7 +144,7 @@ class View {
         this.node.innerHTML = `
         <div style="position: relative">
             <button class="risibank-options-panel-close" style="position: absolute; top: 0; left: 0; border: 1px solid white; padding: 6px 12px; border-radius: 4px;">Fermer</button>
-            <h1 style="margin-bottom: 20px; padding-top: 40px;"><img src="https://risibank.fr/logo.png" height="28" width="28" style="margin-right: 8px; vertical-align: baseline;"> RisiBank JVC</h1>
+            <h1 style="margin-bottom: 20px; padding-top: 40px;"><img src="${RISIBANK_URL}/logo.png" height="28" width="28" style="margin-right: 8px; vertical-align: baseline;"> RisiBank JVC</h1>
             <div style="width: 100%; max-width: 500px; margin: 0 auto;">
                 ${ html }
             </div>

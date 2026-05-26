@@ -1,6 +1,7 @@
 const { storage } = require('../storage.js');
 const { apiGet } = require('../requests.js');
 import { wait } from '../utils.js';
+import { RISIBANK_URL } from '../config.js';
 
 
 export class ImageOptimizerPlugin {
@@ -44,7 +45,7 @@ export class ImageOptimizerPlugin {
         const pages = Array.from({ length: 20 }).map((_, i) => i + 1);
         for (const page of pages) {
             for (const type of ['hot']) {
-                const data = JSON.parse((await apiGet(`https://risibank.fr/api/v1/medias/${type}?page=${page}`)).responseText);
+                const data = JSON.parse((await apiGet(`${RISIBANK_URL}/api/v1/medias/${type}?page=${page}`)).responseText);
                 medias.push(...data);
                 await wait(500);
             }
