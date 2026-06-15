@@ -12,8 +12,8 @@ async function init () {
 
     window.addEventListener('load', async event => {
 
-        // Wait for the body element to be available
-        await waitForFunction(() => document.body);
+        // Wait for React to hydrate the editor toolbar before mounting
+        await waitForFunction(() => document.querySelector('.buttonsEditor'), 10000);
 
         // Start add-on
         new RisiBankJVC();
