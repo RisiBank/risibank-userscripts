@@ -12,7 +12,8 @@ export class MessageEditFormEnhancerPlugin {
 
     async install() {
         document.addEventListener('click', event => {
-            if (event.target.closest('button.messageUser__action[title="Modifier le message"]')) {
+            const btnAction = event.target.closest('button.messageUser__action');
+            if (btnAction?.querySelector('.icon-pencil2, .icon-pencil')) {
                 this.activateForm();
             }
         }, true);
