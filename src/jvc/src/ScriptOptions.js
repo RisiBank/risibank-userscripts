@@ -6,6 +6,20 @@ class ScriptOptions {
 
     static STORAGE_KEY = 'risibank-options';
 
+    static VERSION_KEY = 'risibank-options-version';
+
+    /**
+     * One-shot fixes for options already stored in the user's browser.
+     * Only ever append to this list: an entry's index is the version it upgrades from.
+     */
+    static MIGRATIONS = [
+        // Dropped the 'classique' themes, and changed the default height of the embedded window
+        stored => {
+            stored.theme = { 'light-old': 'light', 'dark-old': 'dark' }[stored.theme] || stored.theme;
+            delete stored.embeddedContainerHeight;
+        },
+    ];
+
     /**
      * List all available options for the plugin
      * Do NOT put double quotes in label or descriptions as this content is NOT html escaped
@@ -23,10 +37,8 @@ class ScriptOptions {
             name: 'theme',
             type: 'select',
             values: [
-                { value: 'light', label: 'futuriste (light)' },
-                { value: 'dark', label: 'futuriste (dark)' },
-                { value: 'light-old', label: 'classique (light)' },
-                { value: 'dark-old', label: 'classique (dark)' },
+                { value: 'light', label: 'clair' },
+                { value: 'dark', label: 'sombre' },
             ],
             label: 'Thème de l\'interface',
             description: `Choisir le thème de l'interface de RisiBank. Les thèmes sont les mêmes que sur le site`,
@@ -45,7 +57,7 @@ class ScriptOptions {
             ],
             label: 'Onglet par défaut',
             description: `Choix de l'onglet à afficher par défaut dans l'interface RisiBank`,
-            default: () => 'top',
+            default: () => 'fav',
         },
         {
             name: 'embedType',
@@ -69,7 +81,7 @@ class ScriptOptions {
             ],
             label: 'Hauteur fenêtre mode intégré',
             description: `Choisir la taille de la zone de contenu dans l\'interface RisiBank (mode intégré)`,
-            default: () => '165px',
+            default: () => '225px',
             activateIf: options => options.embedType === 'iframe',
         },
         {
@@ -221,6 +233,9 @@ class ScriptOptions {
             if (! storageOptions) {
                 throw new Error('No options found');
             }
+
+            await this.migrate(storageOptions);
+
             for (const key in storageOptions) {
                 const value = storageOptions[key];
     
@@ -250,6 +265,17 @@ class ScriptOptions {
     
         this.options = options;
     };
+
+    /** Apply the fixes the stored options have not gone through yet */
+    async migrate(storageOptions) {
+        const version = parseInt(await storage.get(ScriptOptions.VERSION_KEY, 0), 10) || 0;
+        const pending = ScriptOptions.MIGRATIONS.slice(version);
+        if (pending.length === 0) {
+            return;
+        }
+        pending.forEach(migration => migration(storageOptions));
+        await storage.set(ScriptOptions.VERSION_KEY, ScriptOptions.MIGRATIONS.length);
+    }
 
     checkOptionValue(option, value) {
         if (option.type === 'select') {
