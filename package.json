@@ -25,6 +25,6 @@
     "webpack-stream": "^7.0.0"
   },
   "dependencies": {
-    "risibank-web-api": "^1.2.1"
+    "risibank-web-api": "^1.4.0"
   }
 }

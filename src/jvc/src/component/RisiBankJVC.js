@@ -258,6 +258,7 @@ class RisiBankJVCView {
             navbarSize: scriptOptions.getOption('navbarSize'),
             onSelectMedia: this.addImageLinkToTextArea.bind(this),
             showNSFW: scriptOptions.getOption('showNSFW'),
+            hideSearchOnOtherTabs: scriptOptions.getOption('hideSearchOnOtherTabs'),
         });
     }
 
@@ -270,6 +271,7 @@ class RisiBankJVCView {
             navbarSize: scriptOptions.getOption('navbarSize'),
             onSelectMedia: this.addImageLinkToTextArea.bind(this),
             showNSFW: scriptOptions.getOption('showNSFW'),
+            hideSearchOnOtherTabs: scriptOptions.getOption('hideSearchOnOtherTabs'),
         });
     }
 }

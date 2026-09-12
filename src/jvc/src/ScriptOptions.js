@@ -116,6 +116,13 @@ class ScriptOptions {
             default: () => 'sm',
         },
         {
+            name: 'hideSearchOnOtherTabs',
+            type: 'boolean',
+            label: 'Masquer la recherche hors de son onglet',
+            description: `N'afficher la barre de recherche que sur l'onglet recherche, pour laisser plus de place aux images`,
+            default: () => true,
+        },
+        {
             name: 'redirectToRisiBank',
             type: 'boolean',
             separator: true,
