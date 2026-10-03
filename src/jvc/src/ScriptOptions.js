@@ -18,6 +18,10 @@ class ScriptOptions {
             stored.theme = { 'light-old': 'light', 'dark-old': 'dark' }[stored.theme] || stored.theme;
             delete stored.embeddedContainerHeight;
         },
+        // JVC now caps large images at one per message and the message width, so shrinking them by default broke presentation posts
+        stored => {
+            delete stored.shrinkJvcLargeImages;
+        },
     ];
 
     /**
@@ -179,7 +183,7 @@ class ScriptOptions {
             type: 'boolean',
             label: 'Réduire les grandes images en stickers',
             description: `Affiche les grandes images au format sticker plutôt qu'en pleine largeur`,
-            default: () => true,
+            default: () => false,
         },
         {
             name: 'autoUpdate',
