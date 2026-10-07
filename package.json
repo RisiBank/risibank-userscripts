@@ -1,6 +1,6 @@
 {
   "name": "risibank-userscripts",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Enhance RisiBank integration on various places using userscipts ✨",
   "main": "src/index.js",
   "scripts": {
@@ -25,6 +25,6 @@
     "webpack-stream": "^7.0.0"
   },
   "dependencies": {
-    "risibank-web-api": "^1.4.0"
+    "risibank-web-api": "^1.4.1"
   }
 }
