@@ -1,5 +1,7 @@
 const { RisiBank } = require('risibank-web-api');
 import { RISIBANK_URL } from '../config.js';
+import { describeUploadError, getNoelshackLink, needsUpload } from '../mediaSource.js';
+import { showToast } from '../toast.js';
 import { scriptOptions } from '../ScriptOptions.js';
 import { AntiCensorPlugin } from '../plugin/AntiCensorPlugin.js';
 import { AutoUpdatePlugin } from '../plugin/AutoUpdatePlugin.js';
@@ -217,11 +219,33 @@ class RisiBankJVCView {
     }
 
     /**
-     * Add the source_url of a media to a React text area
+     * Add the NoelShack link of a media to a React text area
      */
-    addImageLinkToTextArea({ media }) {
+    async addImageLinkToTextArea({ media }) {
+        let noelshackLink;
+        // The first post of a media uploaded straight to RisiBank takes a few seconds.
+        const uploading = needsUpload(media);
+        if (uploading) {
+            showToast('Envoi du sticker sur NoelShack…');
+        }
+        try {
+            noelshackLink = await getNoelshackLink(media);
+            if (uploading) {
+                showToast('Sticker ajouté', 'success');
+            }
+        } catch (error) {
+            // Userscript users still see a RisiBank link as a sticker (LinkEnhancerPlugin).
+            console.error('RisiBank: could not get a NoelShack link for media', media.id, error);
+            showToast(`${describeUploadError(error)}. Lien RisiBank inséré à la place.`, 'error');
+            noelshackLink = media.cache_url;
+        }
+        const link = noelshackLink + (scriptOptions.getOption('appendStickerHash') ? '#sticker' : '');
+
+        // Looked up after the upload: JVC may have re-rendered the editor meanwhile.
         const formElement = document.querySelector(this.textAreaSelector);
-        const link = media.source_url + (scriptOptions.getOption('appendStickerHash') ? '#sticker' : '');
+        if (!formElement) {
+            return;
+        }
 
         // Get cursor position
         const cursorIndex = formElement.selectionStart;

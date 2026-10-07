@@ -20,6 +20,27 @@ const css = `
         }
     }
 
+    /* Status toast (sticker upload to NoelShack) */
+    .risibank-toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100000;
+        max-width: calc(100vw - 32px);
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: #1e293b;
+        color: #fff;
+        font-size: 14px;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+        pointer-events: none;
+        transition: opacity 0.3s;
+    }
+    .risibank-toast.risibank-toast-success { background: #059669; }
+    .risibank-toast.risibank-toast-error { background: #e11d48; }
+    .risibank-toast.risibank-toast-hidden { opacity: 0; }
+
     /* Image enhancer */
     .risibank-image-enhancer-buttons {
         position: absolute;

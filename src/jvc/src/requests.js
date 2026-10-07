@@ -1,5 +1,3 @@
-
-
 function getGmXmlHttpRequest() {
     if (typeof GM !== 'undefined' && typeof GM.xmlHttpRequest !== 'undefined') {
         return GM.xmlHttpRequest;
@@ -11,18 +9,25 @@ function getGmXmlHttpRequest() {
 }
 
 
+// A stuck request would otherwise never settle, and callers could never fall back.
+const REQUEST_TIMEOUT_MS = 20 * 1000;
 
 
-
-export function apiGet(url) {
+/**
+ * Cross-origin request through the userscript manager. Rejects with the response on a non-2xx status.
+ */
+export function request(options) {
     return new Promise((resolve, reject) => {
         const xhr = getGmXmlHttpRequest();
         xhr({
-            url,
-            method: 'GET',
+            timeout: REQUEST_TIMEOUT_MS,
+            ...options,
+            ontimeout: () => {
+                reject(new Error(`Timeout: ${options.url}`));
+            },
             onload: response => {
                 if (response.status < 200 || response.status >= 300) {
-                    reject(response.statusText);
+                    reject(response);
                 } else {
                     resolve(response);
                 }
@@ -35,23 +40,11 @@ export function apiGet(url) {
 }
 
 
+export function apiGet(url) {
+    return request({ url, method: 'GET' });
+}
+
+
 export function loadImage(url) {
-    return new Promise((resolve, reject) => {
-        const xhr = getGmXmlHttpRequest();
-        xhr({
-            url,
-            method: 'GET',
-            responseType: 'blob',
-            onload: response => {
-                if (response.status < 200 || response.status >= 300) {
-                    reject(response.statusText);
-                } else {
-                    resolve(response.response);
-                }
-            },
-            onerror: error => {
-                reject(error);
-            }
-        });
-    });
+    return request({ url, method: 'GET', responseType: 'blob' }).then(response => response.response);
 }
