@@ -1,10 +1,13 @@
 import { RISIBANK_URL } from './config.js';
 import { apiGet, loadImage, request } from './requests.js';
 
-const NOELSHACK_UPLOAD_URL = 'https://www.noelshack.com/envoi.json';
+// The webservice endpoint JVC itself uses: `envoi.json` would also pile every upload into the user's NoelShack page.
+const NOELSHACK_UPLOAD_URL = 'https://www.noelshack.com/webservice/envoi.json';
 
 // One upload per media, even if it is picked again while the first one runs.
 const pending = new Map();
+// Avoid re-uploading many times the same URL
+const known = new Map();
 
 /**
  * The NoelShack link to post for a media.
@@ -14,11 +17,18 @@ const pending = new Map();
  * and reports the link. RisiBank checks it is the same picture and keeps it for everyone.
  */
 export function getNoelshackLink(media) {
-    if (media.source_url) {
-        return Promise.resolve(media.source_url);
+    const link = media.source_url ?? known.get(media.id);
+    if (link) {
+        return Promise.resolve(link);
     }
     if (!pending.has(media.id)) {
-        pending.set(media.id, fillInSource(media).finally(() => pending.delete(media.id)));
+        const filling = fillInSource(media)
+            .then(url => {
+                known.set(media.id, url);
+                return url;
+            })
+            .finally(() => pending.delete(media.id));
+        pending.set(media.id, filling);
     }
     return pending.get(media.id);
 }
@@ -27,18 +37,29 @@ export function getNoelshackLink(media) {
  * Whether getting the link needs an upload, so the caller can tell the user to wait.
  */
 export function needsUpload(media) {
-    return !media.source_url;
+    return !media.source_url && !known.has(media.id);
 }
 
 async function fillInSource(media) {
     const mediaApi = `${RISIBANK_URL}/api/v1/medias/${media.id}`;
 
+    // Someone may have posted it since the embed loaded it.
+    const current = JSON.parse((await apiGet(mediaApi)).responseText);
+    if (current.source_url) {
+        return current.source_url;
+    }
+
     // Lossless copy: NoelShack re-encodes uploads, and RisiBank compares pixels.
     const { url: fileUrl } = JSON.parse((await apiGet(`${mediaApi}/source-file`)).responseText);
     const file = await loadImage(fileUrl);
     const form = new FormData();
-    form.append('fichier[]', file, `risibank-${media.id}.${fileUrl.split('.').pop()}`);
-    const upload = JSON.parse((await request({ url: NOELSHACK_UPLOAD_URL, method: 'POST', data: form })).responseText);
+    form.append('domain', 'https://www.jeuxvideo.com');
+    const extension = new URL(fileUrl).pathname.split('.').pop();
+    form.append('fichier[]', file, `risibank-${media.id}.${extension}`);
+    // Anonymous: without the user's NoelShack cookies, nothing lands on their NoelShack page.
+    const upload = JSON.parse(
+        (await request({ url: NOELSHACK_UPLOAD_URL, method: 'POST', data: form, anonymous: true })).responseText,
+    );
     if (!upload.url) {
         throw new NoelshackRefusal([].concat(upload.erreurs ?? []).join(' '));
     }
