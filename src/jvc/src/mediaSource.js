@@ -55,7 +55,8 @@ async function fillInSource(media) {
     const form = new FormData();
     form.append('domain', 'https://www.jeuxvideo.com');
     const extension = new URL(fileUrl).pathname.split('.').pop();
-    form.append('fichier[]', file, `risibank-${media.id}.${extension}`);
+    // Random name: a "risibank" pattern would let NoelShack find and bulk-delete every upload.
+    form.append('fichier[]', file, `${Math.random().toString(36).slice(2, 10)}.${extension}`);
     // Anonymous: without the user's NoelShack cookies, nothing lands on their NoelShack page.
     const upload = JSON.parse(
         (await request({ url: NOELSHACK_UPLOAD_URL, method: 'POST', data: form, anonymous: true })).responseText,

@@ -1,6 +1,6 @@
 {
   "name": "risibank-userscripts",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "Enhance RisiBank integration on various places using userscipts ✨",
   "main": "src/index.js",
   "scripts": {
