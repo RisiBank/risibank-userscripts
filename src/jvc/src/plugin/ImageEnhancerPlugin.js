@@ -254,8 +254,8 @@ export class ImageEnhancerPlugin {
         if (! scriptOptions.getOption('addImageFavoriteButton')) {
             return;
         }
-        // Force inline-block so width:100% on the absolute button matches the span, not the line-box
-        link.style.display = 'inline-block';
+        // The button spans the link, so the link must match the span: inline-block hugs a shrunk span, but would collapse JVC's full-width one to 0x0
+        link.style.display = scriptOptions.getOption('shrinkJvcLargeImages') ? 'inline-block' : 'block';
         link.style.position = 'relative';
         link.classList.add('risibank-image-enhancer-link');
         link.insertAdjacentHTML('beforeend', `
