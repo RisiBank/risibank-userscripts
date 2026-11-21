@@ -22,6 +22,10 @@ class ScriptOptions {
         stored => {
             delete stored.shrinkJvcLargeImages;
         },
+        // The anti-censor never ran on forums before 1.9 and now works differently, so switch it back on for everyone once
+        stored => {
+            delete stored.antiCensorPlugin;
+        },
     ];
 
     /**
@@ -211,8 +215,8 @@ class ScriptOptions {
         {
             name: 'antiCensorPlugin',
             type: 'boolean',
-            label: 'Plugin anti-censure (textuel)',
-            description: `Remplace automatiquement certains mots clefs sensibles d'une manière transparente pour ceux qui ont l'userscript`,
+            label: 'Plugin anti-censure',
+            description: `Évite que le bot de JVC bloque tes messages à cause de certains mots. Le texte reste lisible par tous, même sans le script.`,
             default: () => true,
         },
         {
