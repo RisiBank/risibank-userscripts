@@ -1,6 +1,6 @@
 const { RisiBank } = require('risibank-web-api');
 import { RISIBANK_URL } from '../config.js';
-import { describeUploadError, getNoelshackLink, needsUpload } from '../mediaSource.js';
+import { describeUploadError, getNoelshackLink } from '../mediaSource.js';
 import { showToast } from '../toast.js';
 import { scriptOptions } from '../ScriptOptions.js';
 import { AntiCensorPlugin } from '../plugin/AntiCensorPlugin.js';
@@ -223,15 +223,15 @@ class RisiBankJVCView {
      */
     async addImageLinkToTextArea({ media }) {
         let noelshackLink;
-        // The first post of a media uploaded straight to RisiBank takes a few seconds.
-        const uploading = needsUpload(media);
-        if (uploading) {
-            showToast('Envoi du sticker sur NoelShack…');
-        }
+        // Sending a media to NoelShack takes a few seconds: say why the post waits.
+        let uploadReason = null;
         try {
-            noelshackLink = await getNoelshackLink(media);
-            if (uploading) {
-                showToast('Sticker ajouté', 'success');
+            noelshackLink = await getNoelshackLink(media, reason => {
+                uploadReason = reason;
+                showToast(reason === 'dead' ? 'Lien NoelShack mort, nouvel envoi en cours…' : 'Envoi du sticker sur NoelShack…');
+            });
+            if (uploadReason) {
+                showToast(uploadReason === 'dead' ? 'Sticker renvoyé sur NoelShack' : 'Sticker ajouté', 'success');
             }
         } catch (error) {
             // Userscript users still see a RisiBank link as a sticker (LinkEnhancerPlugin).
