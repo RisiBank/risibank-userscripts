@@ -129,6 +129,7 @@ export const JVC_BANNED_WORDS = [
     'pédé',
     'pendre',
     'pénis',
+    'pétain',
     'pétard',
     'poignarder',
     'ponce',
