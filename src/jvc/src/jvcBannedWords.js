@@ -128,7 +128,7 @@ export const JVC_BANNED_WORDS = [
     'onlyfans',
     'pédale',
     'pédé',
-    'pd,
+    'pd',
     'pendre',
     'pénis',
     'pétain',
